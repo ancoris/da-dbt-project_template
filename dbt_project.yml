@@ -1,0 +1,28 @@
+name: 'dbt_project_template'
+version: '1.0.0'
+
+
+# Which context to use in profiles.yml
+profile: 'dev'
+
+
+# These configurations specify where dbt should look for different types of files
+# These don't typically change
+source-paths: ["models"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+data-paths: ["data"]
+macro-paths: ["macros"]
+
+
+# These don't typically change
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+    - "target"
+    - "dbt_modules"
+
+
+# Model confirguration
+#models:
+#  vars:
+#    scenario: 'A'
