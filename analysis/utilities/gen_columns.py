@@ -1,5 +1,5 @@
 # Python 3.7
-# Written by: TL - if it breaks let me know
+# Authour: TL
 import json
 import os
 import time
