@@ -1,4 +1,4 @@
-name: 'dbt_project_template'
+name: 'dbt_project_template' # change in seeds section too
 version: '1.0.0'
 
 
@@ -23,6 +23,11 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 
 # Model confirguration
+seeds:
+  dbt_project_template:
+    enabled: true
+    schema: pl_reference_stage
+
 #models:
 #  vars:
 #    scenario: 'A'

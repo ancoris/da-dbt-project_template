@@ -7,7 +7,5 @@
 with date_dimension as (
     {{ dbt_macros.date_dimension('1900-01-01', '2050-12-31') }}
 )
-select
-    *
-from
-    date_dimension
+select  *
+from    date_dimension
