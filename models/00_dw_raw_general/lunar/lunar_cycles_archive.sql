@@ -1,6 +1,6 @@
 {{
     config(
-        materialized='archive_incremental',
+        materialized='table',
         schema='raw_dw_general',
         partition_by='date(meta_process_time)'
     )

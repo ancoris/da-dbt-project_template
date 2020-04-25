@@ -24,9 +24,13 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # Model confirguration
 seeds:
-  dbt_project_template:
+  dbt_example_cycle_hire:
     enabled: true
-    schema: pl_reference_stage
+    schema: dw_raw_general
+    column_types:
+      meta_delivery_time: timestamp
+    post-hook: "update {{ this }} set meta_delivery_time = {{dbt_macros.meta_process_time()}} where meta_delivery_time is null"
+
 
 #models:
 #  vars:
