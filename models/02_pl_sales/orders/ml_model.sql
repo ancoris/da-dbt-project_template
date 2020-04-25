@@ -1,3 +1,4 @@
+{#
 {{
     config(
       materialized='ml_model_kmeans',
@@ -15,3 +16,4 @@ select  rental_id,
 from    {{ref('fact_order')}} f
 where f.start_station_surrogate_key is not null
 and f.end_station_surrogate_key is not null
+#}
