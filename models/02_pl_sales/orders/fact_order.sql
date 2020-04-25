@@ -4,6 +4,7 @@
         materialized='incremental',
         unique_key='order_id',
         schema='pl_sales',
+        cluster_by='order_id',
         partition_by='date(meta_process_time)'
     )
 }}
