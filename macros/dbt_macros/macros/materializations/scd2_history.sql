@@ -21,11 +21,11 @@
 
   {{ run_hooks(pre_hooks, inside_transaction=True) }}
 
-  {% set strategy = dbt_macros.scd2_history_strategy(model, config) %}
+  {% set strategy = scd2_history_strategy(model, config) %}
 
   {% if not target_relation_exists %}
 
-      {% set build_sql = dbt_macros.build_initial_scd2_history_table(strategy, model['injected_sql']) %}
+      {% set build_sql = build_initial_scd2_history_table(strategy, model['injected_sql']) %}
       {% call statement('main') -%}
           {{ create_table_as(False, target_relation, build_sql) }}
       {% endcall %}
@@ -33,7 +33,7 @@
   {% else %}
 
       -- build a temp table to hold all of the interim inserts
-      {% set staging_table = dbt_macros.build_scd2_history_staging_table(strategy, sql, target_relation) %}
+      {% set staging_table = build_scd2_history_staging_table(strategy, sql, target_relation) %}
 
       {% set source_columns = adapter.get_columns_in_relation(staging_table) %}
 
@@ -43,7 +43,7 @@
       {% endfor %}
 
       {% call statement('main') %}
-          {{ dbt_macros.scd2_history_merge_sql(
+          {{ scd2_history_merge_sql(
                 target = target_relation,
                 source = staging_table,
                 insert_cols = quoted_source_columns,
@@ -96,7 +96,7 @@
             ifnull(
               lead( d.meta_start_time)
               over (partition by {{ strategy.natural_key }} order by meta_start_time asc)
-              , {{ dbt_macros.CONSTANT_TIMESTAMP_BIG()}}) as meta_end_time
+              , {{ CONSTANT_TIMESTAMP_BIG()}}) as meta_end_time
     from
     (
       {{ sql }}
@@ -110,7 +110,7 @@
 {% macro build_scd2_history_staging_table(strategy, sql, target_relation) %}
     {% set tmp_relation = make_temp_relation(target_relation) %}
 
-    {% set new_rows_sql = dbt_macros.scd2_history_staging_table_new_rows_sql(strategy, sql, target_relation) %}
+    {% set new_rows_sql = scd2_history_staging_table_new_rows_sql(strategy, sql, target_relation) %}
 
     {% call statement('build_scd2_history_staging_relation_inserts') %}
         {{ create_table_as(True, tmp_relation, new_rows_sql) }}
@@ -130,7 +130,7 @@ with natural_keys_changed as
   (
   {{ sql }}
   ) a
-  where meta_process_time = {{ dbt_macros.meta_process_time() }}
+  where meta_process_time = {{ meta_process_time() }}
 )
 
 select  *,
@@ -147,7 +147,7 @@ from
             ifnull(
               lead( events.meta_start_time)
               over (partition by events.{{ strategy.natural_key }} order by events.meta_start_time asc)
-              , {{ dbt_macros.CONSTANT_TIMESTAMP_BIG()}}) as meta_end_time
+              , {{ CONSTANT_TIMESTAMP_BIG()}}) as meta_end_time
     from
     (
       {{ sql }}
@@ -161,7 +161,7 @@ from
 
 
 {% macro scd2_history_merge_sql(target, source, insert_cols, natural_key_col) -%}
-  {{ adapter_macro('dbt_macros.scd2_history_merge_sql', target, source, insert_cols, natural_key_col) }}
+  {{ adapter_macro('scd2_history_merge_sql', target, source, insert_cols, natural_key_col) }}
 {%- endmacro %}
 
 {% macro default__scd2_history_merge_sql(target, source, insert_cols, natural_key_col) -%}
@@ -181,7 +181,7 @@ from
     union all
     select  'insert'                          as merge_operation,
             * except (meta_process_time),
-            {{ dbt_macros.meta_process_time() }} as meta_process_time -- always load records in the current load partition
+            {{ meta_process_time() }} as meta_process_time -- always load records in the current load partition
     from    {{ source }} a
   ) src
   on src.{{ natural_key_col }} = trg.{{ natural_key_col }} and src.merge_operation = 'delete'

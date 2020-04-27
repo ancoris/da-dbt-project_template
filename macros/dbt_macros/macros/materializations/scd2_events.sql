@@ -21,11 +21,11 @@
 
   {{ run_hooks(pre_hooks, inside_transaction=True) }}
 
-  {% set strategy = dbt_macros.scd2_events_strategy(model, config) %}
+  {% set strategy = scd2_events_strategy(model, config) %}
 
   {% if not target_relation_exists %}
 
-      {% set build_sql = dbt_macros.build_initial_scd2_events_table(strategy, model['injected_sql']) %}
+      {% set build_sql = build_initial_scd2_events_table(strategy, model['injected_sql']) %}
       {% call statement('main') -%}
           {{ create_table_as(False, target_relation, build_sql) }}
       {% endcall %}
@@ -33,7 +33,7 @@
   {% else %}
 
       -- build a temp table to hold all of the interim inserts
-      {% set staging_table = dbt_macros.build_scd2_events_staging_table(strategy, sql, target_relation) %}
+      {% set staging_table = build_scd2_events_staging_table(strategy, sql, target_relation) %}
 
       {% set source_columns = adapter.get_columns_in_relation(staging_table) %}
 
@@ -43,7 +43,7 @@
       {% endfor %}
 
       {% call statement('main') %}
-          {{ dbt_macros.scd2_events_merge_sql(
+          {{ scd2_events_merge_sql(
                 target = target_relation,
                 source = staging_table,
                 insert_cols = quoted_source_columns
@@ -113,7 +113,7 @@
 {% macro build_scd2_events_staging_table(strategy, sql, target_relation) %}
     {% set tmp_relation = make_temp_relation(target_relation) %}
 
-    {% set new_rows_sql = dbt_macros.scd2_events_staging_table_new_rows_sql(strategy, sql, target_relation) %}
+    {% set new_rows_sql = scd2_events_staging_table_new_rows_sql(strategy, sql, target_relation) %}
 
     {% call statement('build_scd2_events_staging_relation_inserts') %}
         {{ create_table_as(True, tmp_relation, new_rows_sql) }}
@@ -186,15 +186,15 @@
           target_latest
   on      target_latest.{{ strategy.natural_key }} = source_data.{{ strategy.natural_key }}
   where   target_latest.meta_scd_action <> 'delete'
-  and     {{ dbt_macros.row_change_detection_expr('source_data', 'target_latest', strategy.cols_to_check) }}
+  and     {{ row_change_detection_expr('source_data', 'target_latest', strategy.cols_to_check) }}
 
   -- existing records now deleted
   union all
   select  target_latest.* except(meta_process_time, meta_delivery_time, meta_start_time, meta_scd_action),
-          {{ dbt_macros.meta_process_time() }} as meta_process_time,
-          {{ dbt_macros.meta_process_time() }} as meta_delivery_time,
+          {{ meta_process_time() }} as meta_process_time,
+          {{ meta_process_time() }} as meta_delivery_time,
           'delete',
-          {{ dbt_macros.meta_process_time() }} as meta_start_time
+          {{ meta_process_time() }} as meta_start_time
   from    target_latest
   left outer join
           source_data on target_latest.{{ strategy.natural_key }} = source_data.{{ strategy.natural_key }}
@@ -217,7 +217,7 @@
 
 
 {% macro scd2_events_merge_sql(target, source, insert_cols) -%}
-  {{ adapter_macro('dbt_macros.scd2_events_merge_sql', target, source, insert_cols) }}
+  {{ adapter_macro('scd2_events_merge_sql', target, source, insert_cols) }}
 {%- endmacro %}
 
 {% macro default__scd2_events_merge_sql(target, source, insert_cols) -%}

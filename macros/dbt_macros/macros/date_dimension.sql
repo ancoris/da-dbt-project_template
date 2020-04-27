@@ -245,7 +245,7 @@
           if(uk_holidays.uk_holiday_name is not null, 1, 0) is_uk_holiday,
           uk_holidays.uk_holiday_name,
 
-          {{dbt_macros.meta_process_time() }} as meta_process_time
+          {{meta_process_time() }} as meta_process_time
     from {{this.schema}}_stage.dim_date_stage p
 
       left outer join {{this.schema}}_stage.dim_date_public_holiday_stage uk_holidays
