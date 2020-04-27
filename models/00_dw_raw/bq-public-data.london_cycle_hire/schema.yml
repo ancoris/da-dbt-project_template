@@ -2,8 +2,6 @@ version: 2
 
 sources:
   - name: london_santander
-    database: bigquery-public-data
-    schema: london_bicycles
     tables:
       - name: cycle_stations
         columns:
