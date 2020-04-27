@@ -26,4 +26,4 @@ select  id as cycle_station_natural_key,
         meta_process_time,
         meta_delivery_time
 from    {{ ref('cycle_stations_clean') }}
-where   meta_process_time =  {{ dbt_macros.meta_process_time() }}
+where   meta_process_time =  {{ meta_process_time() }}

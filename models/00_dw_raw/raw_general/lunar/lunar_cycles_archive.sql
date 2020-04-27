@@ -10,5 +10,5 @@ select  full_moon_date,
         is_partial_eclipse,
         region,
         meta_delivery_time,
-        {{ dbt_macros.meta_process_time() }}    as meta_process_time
+        {{ meta_process_time() }}    as meta_process_time
 from    {{ref('lunar_cycles_dbt_seed')}}

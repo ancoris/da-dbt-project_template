@@ -19,9 +19,9 @@ select  rental_id,
         end_station_priority_id,
 
         -- meta fields
-        {{dbt_macros.meta_process_time() }} as meta_process_time,
+        {{meta_process_time() }} as meta_process_time,
         meta_delivery_time
 from {{ ref('cycle_hire_raw') }}
 
 -- we only load what has been delivered in this process window to simulate an incremental load
-where meta_delivery_time = {{dbt_macros.meta_process_time() }}
+where meta_delivery_time = {{meta_process_time() }}

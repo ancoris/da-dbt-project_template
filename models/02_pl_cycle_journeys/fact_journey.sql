@@ -73,11 +73,11 @@ left outer join {{ ref('dim_date') }} start_date_dim
 left outer join {{ ref('dim_date') }} end_date_dim
   on end_date_dim.date_actual = cast(j.end_date as date)
 
-where j.meta_process_time =  {{ dbt_macros.meta_process_time() }}
+where j.meta_process_time =  {{ meta_process_time() }}
 
 {% if is_incremental() %}
 
 -- this filter will only be applied on an incremental run
-and j.meta_delivery_time > (select ifnull( max(meta_delivery_time), {{dbt_macros.CONSTANT_TIMESTAMP_SMALL()}}) from {{ this }})
+and j.meta_delivery_time > (select ifnull( max(meta_delivery_time), {{CONSTANT_TIMESTAMP_SMALL()}}) from {{ this }})
 
 {% endif %}

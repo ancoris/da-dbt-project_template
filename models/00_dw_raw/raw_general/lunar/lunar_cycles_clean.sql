@@ -11,4 +11,4 @@ select  full_moon_date,
         meta_delivery_time,
         meta_process_time
 from    {{ref('lunar_cycles_archive')}}
-where meta_process_time = {{dbt_macros.meta_process_time() }}
+where meta_process_time = {{meta_process_time() }}

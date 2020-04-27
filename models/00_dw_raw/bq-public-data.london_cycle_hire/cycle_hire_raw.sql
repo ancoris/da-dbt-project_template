@@ -17,16 +17,16 @@ select  rental_id,
         end_station_logical_terminal,
         start_station_logical_terminal,
         end_station_priority_id,
-        {{dbt_macros.meta_process_time() }} as meta_delivery_time
+        {{meta_process_time() }} as meta_delivery_time
 from {{ source('london_santander', 'cycle_hire') }}
 where 1=1
 
 {% if is_incremental() %}
 
-and start_date > (select ifnull(max(start_date), {{ dbt_macros.CONSTANT_TIMESTAMP_SMALL()}}) from {{ this }})
+and start_date > (select ifnull(max(start_date), {{ CONSTANT_TIMESTAMP_SMALL()}}) from {{ this }})
 
 {% endif %}
 
-and start_date < {{dbt_macros.meta_process_time() }}
+and start_date < {{meta_process_time() }}
 
 limit 100 -- MAKE SURE YOU REMOVE THIS!

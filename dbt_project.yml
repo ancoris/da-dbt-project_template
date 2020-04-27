@@ -29,7 +29,7 @@ seeds:
     schema: raw_general
     column_types:
       meta_delivery_time: timestamp
-    post-hook: "update {{ this }} set meta_delivery_time = {{dbt_macros.meta_process_time()}} where meta_delivery_time is null"
+    post-hook: "update {{ this }} set meta_delivery_time = {{meta_process_time()}} where meta_delivery_time is null"
 
 
 #models:
