@@ -139,15 +139,15 @@
     {% do return(tmp_relation) %}
 {% endmacro %}
 
-{% macro row_change_detection_expr(source_a, source_b, cols) %}
-  {% set row_change_detection_expr -%}
+{% macro row_change_detection_exprxxx(source_a, source_b, cols) %}
+  {% set row_change_detection_exprxxx -%}
         {% for col in cols %}
             to_json_string({{ source_a }}.{{ col }}) != to_json_string({{ source_b }}.{{ col }})
             {%- if not loop.last %} or {% endif %}
 
         {% endfor %}
   {%- endset %}
-  {% do return(row_change_detection_expr) %}
+  {% do return(row_change_detection_exprxxx) %}
 {% endmacro %}
 
 {% macro scd2_staging_table_inserts(strategy, source_sql, target_relation) -%}
@@ -181,7 +181,7 @@
                 scd2_latest
         on      scd2_latest.internal_unique_key = source_data.internal_unique_key
         where   scd2_latest.internal_unique_key is null -- new entry
-          or    ({{ dbt_macros.row_change_detection_expr('source_data', 'scd2_latest', strategy.cols_to_check) }}) -- updated entry
+          or    ({{ dbt_macros.row_change_detection_exprxxx('source_data', 'scd2_latest', strategy.cols_to_check) }}) -- updated entry
           or    scd2_latest.meta_end_time is not null -- reinserted entry
     )
 
@@ -219,7 +219,7 @@
         inner join
                 scd2_latest
         on      scd2_latest.internal_unique_key = source_data.internal_unique_key
-        where   (({{ dbt_macros.row_change_detection_expr('source_data', 'scd2_latest', strategy.cols_to_check) }}))
+        where   (({{ dbt_macros.row_change_detection_exprxxx('source_data', 'scd2_latest', strategy.cols_to_check) }}))
         union all
         -- all the ended items in scd2 that have been re-added
         select  'update' as internal_change_type,
