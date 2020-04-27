@@ -24,7 +24,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # Model confirguration
 seeds:
-  dbt_example_cycle_hire:
+  dbt_project_template:
     enabled: true
     schema: raw_general
     column_types:
