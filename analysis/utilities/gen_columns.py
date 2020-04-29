@@ -9,8 +9,6 @@ output = True
 
 startTime = time.time()
 
-# This script assumes no dots (.) in dataset name or table name.
-
 # Specify project id
 projectId = "data-sandbox-266217"
 

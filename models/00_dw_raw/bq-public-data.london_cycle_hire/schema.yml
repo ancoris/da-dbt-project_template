@@ -1,7 +1,9 @@
 version: 2
-
+# remove database and schema if not in EU processing region
 sources:
   - name: london_santander
+    database: bigquery-public-data
+    schema: london_bicycles
     tables:
       - name: cycle_stations
         columns:
