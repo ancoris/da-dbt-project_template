@@ -29,4 +29,4 @@ and start_date > (select ifnull(max(start_date), {{ CONSTANT_TIMESTAMP_SMALL()}}
 
 and start_date < {{meta_process_time() }}
 
-limit 100 -- MAKE SURE YOU REMOVE THIS!
+limit 100 -- MAKE SURE YOU REMOVE THIS! ONLY FOR TEMPLATE PURPOSES.

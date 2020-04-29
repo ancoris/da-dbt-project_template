@@ -1,5 +1,10 @@
+"""This script will generate compatiable schema.yml files for each table within the datasets of the GCP
+project specified. These yml files will be stored in analysis/utilties/columns"""
+
 # Python 3.7
 # Authour: TL
+# Execute from project folder. i.e python analysis/utilites/gen_columns.py
+
 import json
 import os
 import time
@@ -65,7 +70,7 @@ for targetSource in targets:
     with open("{}{}tableList_{}.txt".format(scriptFolder, tableDump, targetSource), "r") as tables:
         if output:
             print("Extracting tables from dataset: {}".format(targetSource))
-        tableList = {}  # this isn't necessary as datasets are looped over
+        tableList = {}
         tableList[targetSource] = []
         for table in tables:
             tableList[targetSource].append(table.rstrip())
