@@ -2,7 +2,7 @@
   {{
     config(
       materialized='view',
-      schema='pl_journeys'
+      schema='pl_ml_unsupervised_journeys'
     )
 }}
 select  centroid_id,

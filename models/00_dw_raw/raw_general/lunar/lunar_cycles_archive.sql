@@ -1,7 +1,7 @@
 {{
     config(
         materialized='table',
-        schema='raw_general_archive',
+        schema='raw_archive_general',
         partition_by='date(meta_process_time)'
     )
 }}

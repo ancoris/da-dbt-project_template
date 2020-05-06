@@ -1,7 +1,7 @@
 {{
     config(
         materialized='view',
-        schema='raw_general_clean'
+        schema='raw_clean_general'
     )
 }}
 select  full_moon_date,

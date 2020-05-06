@@ -1,7 +1,7 @@
 {{
     config(
         materialized='archive_incremental',
-        schema='raw_cycle_hire_archive',
+        schema='raw_archive_bqpublic',
         partition_by='date(meta_process_time)'
     )
 }}

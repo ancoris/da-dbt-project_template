@@ -1,7 +1,7 @@
 {{
     config(
       materialized='table',
-      schema='pl_journeys'
+      schema='pl_ml_unsupervised_journeys'
     )
 }}
 select  name                                      as station_name,

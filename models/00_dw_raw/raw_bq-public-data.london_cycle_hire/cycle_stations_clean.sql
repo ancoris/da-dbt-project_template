@@ -1,7 +1,7 @@
 {{
     config(
         materialized='view',
-        schema='raw_cycle_hire_clean'
+        schema='raw_clean_bqpublic'
     )
 }}
 select  id,

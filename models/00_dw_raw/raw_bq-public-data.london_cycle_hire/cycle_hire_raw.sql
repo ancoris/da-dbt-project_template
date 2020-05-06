@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        schema='raw_cycle_hire',
+        schema='raw_bqpublic',
         partition_by='date(meta_delivery_time)'
     )
 }}

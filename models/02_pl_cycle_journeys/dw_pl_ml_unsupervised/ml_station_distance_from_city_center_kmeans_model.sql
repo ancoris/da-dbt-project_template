@@ -1,7 +1,7 @@
 {{
     config(
       materialized='ml_model_kmeans',
-      schema='pl_journeys',
+      schema='pl_ml_unsupervised_journeys',
       feature_set_key='station_name',
       model_options='model_type="kmeans", num_clusters=6',
       tags=["ml_model"]

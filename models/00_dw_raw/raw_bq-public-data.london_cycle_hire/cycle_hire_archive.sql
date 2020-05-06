@@ -1,7 +1,8 @@
 {{
     config(
-        materialized='view',
-        schema='raw_cycle_hire_clean'
+        materialized='archive_incremental',
+        schema='raw_archive_bqpublic',
+        partition_by='date(meta_process_time)'
     )
 }}
 select  rental_id,
@@ -18,6 +19,9 @@ select  rental_id,
         end_station_priority_id,
 
         -- meta fields
-        meta_process_time,
+        {{meta_process_time() }} as meta_process_time,
         meta_delivery_time
-from {{ ref('cycle_hire_archive') }}
+from {{ ref('cycle_hire_raw') }}
+
+-- we only load what has been delivered in this process window to simulate an incremental load
+where meta_delivery_time = {{meta_process_time() }}
