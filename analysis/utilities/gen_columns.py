@@ -3,11 +3,12 @@ project specified. These yml files will be stored in analysis/utilties/columns""
 
 # Python 3.7
 # Authour: TL
-# Execute from project folder. i.e python analysis/utilites/gen_columns.py
+# Execute from project folder. i.e 'python analysis/utilities/gen_columns.py'
 
 import json
 import os
 import time
+import shutil
 
 # Controls console output
 output = True
@@ -132,3 +133,9 @@ if output:
         print("Number of columns: {}".format(
             datasetInfo[dataset]["columnCount"]))
         print("-"*25)
+
+
+try:
+    shutil.rmtree(scriptFolder+"dump")
+except OSError as e:
+    print("Error: {} : {}".format(scriptFolder+"dump", e.strerror))
