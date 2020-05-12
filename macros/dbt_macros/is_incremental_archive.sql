@@ -11,7 +11,6 @@
         {% set relation = adapter.get_relation(this.database, this.schema, this.table) %}
         {{ return(relation is not none
                   and relation.type == 'table'
-                  and model.config.materialized == 'archive_incremental'
-                  and not flags.FULL_REFRESH) }}
+                  and model.config.materialized == 'archive_incremental') }}
     {% endif %}
 {% endmacro %}
