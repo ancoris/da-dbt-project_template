@@ -20,7 +20,7 @@ projectId = "data-sandbox-266217"
 
 
 # list target bq source datasets
-targets = ["london_santander"]
+targets = ["london_santander", "json_experimentation"]
 
 #
 placedParentDir, filename = os.path.split(__file__)
@@ -100,12 +100,20 @@ for file in os.listdir(scriptFolder+jsonDump):
     if file.split(".")[0] not in datasetInfo.keys():
         datasetInfo[file.split(".")[0]] = {"tableCount": 0, "columnCount": 0}
     datasetInfo[file.split(".")[0]]["tableCount"] += 1
+
+    dsColFolder = file.split(".")[0] + "/"
+
+    if not os.path.exists(os.path.dirname(scriptFolder+columnDump+dsColFolder)):
+        os.makedirs(os.path.dirname(
+            scriptFolder+columnDump+dsColFolder), exist_ok=True)
+
     with open(scriptFolder+jsonDump+"/"+file, "r") as f:
         data = json.load(f)
-        with open("{}{}{}".format(scriptFolder, columnDump, os.path.splitext(file)[0]+".yml"), 'w') as columnTxt:
+        with open("{}{}{}{}".format(scriptFolder, columnDump, dsColFolder, os.path.splitext(file)[0]+".yml"), 'w') as columnTxt:
             if output:
                 print("Generating yml for {}:{}".format(
                     file.split(".")[0], file.split(".")[1]))
+            columnTxt.write("version: 2\n")
             columnTxt.write("sources:\n")
             columnTxt.write("  - name: {}\n".format(file.split(".")[0]))
             columnTxt.write("    tables:\n")
@@ -135,6 +143,7 @@ if output:
         print("-"*25)
 
 
+# Clean up
 try:
     shutil.rmtree(scriptFolder+"dump")
 except OSError as e:
