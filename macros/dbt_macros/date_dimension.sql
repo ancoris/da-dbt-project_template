@@ -8,7 +8,7 @@
   -- 1. Build dim_date_stage
   {% set build_dim_date_stage %}
 
-  create or replace table {{this.schema}}_stage.dim_date_stage
+  create or replace table {{this.database}}.{{this.schema}}.dim_date_stage
   as
   with date_range_spine as (
 
@@ -97,18 +97,18 @@
   -- public holidays
   {% set build_dim_date_public_holiday_stage %}
 
-  create or replace table {{this.schema}}_stage.dim_date_public_holiday_stage
+  create or replace table {{this.schema}}.dim_date_public_holiday_stage
   as
   -- Easter Sunday is the first Sunday after the full moon that occurs on or after the vernal equinox (21 March)
   with easter_sundays as
   (
     select  min(s.date_surrogate_key) as date_day,
             'Easter Sunday'           as uk_holiday_name
-    from    {{this.schema}}_stage.dim_date_stage s
+    from    {{this.schema}}.dim_date_stage s
     where   s.date_surrogate_key >
     (
       select  l.date_surrogate_key
-      from    {{this.schema}}_stage.dim_date_stage l
+      from    {{this.schema}}.dim_date_stage l
       where l.year_no = s.year_no
       and   l.lunar_uk_is_first_full_moon_on_or_after_march_21 = 1
     )
@@ -118,7 +118,7 @@
 
   select  date_surrogate_key            as date_day,
           'New Years Day'               as uk_holiday_name
-  from    {{this.schema}}_stage.dim_date_stage
+  from    {{this.schema}}.dim_date_stage
   where   day_of_year_no = 1
 
   -- Easter
@@ -142,7 +142,7 @@
   union all
   select  min(date_surrogate_key)       as date_day,
           'Early May bank holiday'      as uk_holiday_name
-  from    {{this.schema}}_stage.dim_date_stage
+  from    {{this.schema}}.dim_date_stage
   where   month_name_full = 'May'
   and     day_name_full = 'Monday'
   group by year_no
@@ -150,7 +150,7 @@
   union all
   select  max(date_surrogate_key)       as date_day,
           'Late May bank holiday'       as uk_holiday_name
-  from    {{this.schema}}_stage.dim_date_stage
+  from    {{this.schema}}.dim_date_stage
   where   month_name_full = 'May'
   and     day_name_full = 'Monday'
   group by year_no
@@ -158,7 +158,7 @@
   union all
   select  max(date_surrogate_key)       as date_day,
           'August bank holiday'         as uk_holiday_name
-  from    {{this.schema}}_stage.dim_date_stage
+  from    {{this.schema}}.dim_date_stage
   where   month_name_full = 'August'
   and     day_name_full = 'Monday'
   group by year_no
@@ -166,7 +166,7 @@
   union all
   select  date_surrogate_key            as date_day,
           'Christmas Day'               as uk_holiday_name
-  from    {{this.schema}}_stage.dim_date_stage
+  from    {{this.schema}}.dim_date_stage
   where   month_name_full = 'December'
   and
   (
@@ -180,7 +180,7 @@
   union all
   select  date_surrogate_key            as date_day,
           'Boxing Day'                  as uk_holiday_name
-  from    {{this.schema}}_stage.dim_date_stage
+  from    {{this.schema}}.dim_date_stage
   where   month_name_full = 'December'
   and
   (
@@ -195,60 +195,153 @@
   {% endset %}
   {% set results = run_query(build_dim_date_public_holiday_stage) %}
 
-  select  date_surrogate_key,
-          date_actual,
+  with temp as
+  (
+    select  date_surrogate_key,
+            date_actual,
 
-          concat(year_no, 'D', day_of_year_no)  as year_day,
-          concat(year_no, 'W', week_no)         as year_week,
-          concat(year_no, 'M', month_no)        as year_month,
-          concat(year_no, 'Q', quarter_no)      as year_quarter,
+            concat(year_no, 'D', day_of_year_no)  as year_day,
+            concat(year_no, 'W', week_no)         as year_week,
+            concat(year_no, 'M', month_no)        as year_month,
+            concat(year_no, 'Q', quarter_no)      as year_quarter,
 
-          cast(day_of_month_no as int64)  as day_of_month_no,
-          if(day_name_short in ('Sat','Sun'),0 ,1)  as is_week_day,
-          day_name_full,
-          day_name_short,
-          month_name_full,
-          month_name_short,
+            cast(day_of_month_no as int64)  as day_of_month_no,
+            if(day_name_short in ('Sat','Sun'),0 ,1)  as is_week_day,
+            day_name_full,
+            day_name_short,
+            month_name_full,
+            month_name_short,
 
-          cast(month_no as int64)     as month_no,
-          cast(week_no as int64)      as week_no,
-          cast(quarter_no as int64)   as quarter_no,
-          cast(year_no as int64)      as year_no,
-          cast(century_no as int64)   as century_no,
+            cast(month_no as int64)     as month_no,
+            cast(week_no as int64)      as week_no,
+            cast(quarter_no as int64)   as quarter_no,
+            cast(year_no as int64)      as year_no,
+            cast(century_no as int64)   as century_no,
 
-          first_day_of_week,
-          first_day_of_month,
-          first_day_of_quarter,
-          first_day_of_year,
+            first_day_of_week,
+            first_day_of_month,
+            first_day_of_quarter,
+            first_day_of_year,
 
-          last_day_of_week,
-          last_day_of_month,
-          last_day_of_quarter,
-          last_day_of_year,
+            last_day_of_week,
+            last_day_of_month,
+            last_day_of_quarter,
+            last_day_of_year,
 
-          cast(day_of_week_no as int64)       as day_of_week_no,
-          cast(day_of_quarter_no as int64)    as day_of_quarter_no,
-          cast(day_of_year_no as int64)       as day_of_year_no,
+            cast(day_of_week_no as int64)       as day_of_week_no,
+            cast(day_of_quarter_no as int64)    as day_of_quarter_no,
+            cast(day_of_year_no as int64)       as day_of_year_no,
 
-          year_no_cumulative,
-          quarter_no_cumulative,
-          month_no_cumulative,
-          week_no_cumulative,
-          day_no_cumulative,
+            year_no_cumulative,
+            quarter_no_cumulative,
+            month_no_cumulative,
+            week_no_cumulative,
+            day_no_cumulative,
 
-          -- lunar information
-          lunar_uk_is_full_moon,
-          lunar_uk_is_total_eclipse,
-          lunar_uk_is_partial_eclipse,
+            -- lunar information
+            lunar_uk_is_full_moon,
+            lunar_uk_is_total_eclipse,
+            lunar_uk_is_partial_eclipse,
 
-          -- bank holidays
-          if(uk_holidays.uk_holiday_name is not null, 1, 0) is_uk_holiday,
-          uk_holidays.uk_holiday_name,
+            -- bank holidays
+            if(uk_holidays.uk_holiday_name is not null, 1, 0) is_uk_holiday,
+            uk_holidays.uk_holiday_name,
 
-          {{meta_process_time() }} as meta_process_time
-    from {{this.schema}}_stage.dim_date_stage p
 
-      left outer join {{this.schema}}_stage.dim_date_public_holiday_stage uk_holidays
-      on uk_holidays.date_day = p.date_surrogate_key
+            {{meta_process_time() }} as meta_process_time
+      from {{this.schema}}.dim_date_stage p
+
+        left outer join {{this.schema}}.dim_date_public_holiday_stage uk_holidays
+        on uk_holidays.date_day = p.date_surrogate_key
+    )
+
+    select
+      date_surrogate_key,
+      date_actual,
+
+      year_day,
+      year_week,
+      year_month,
+      year_quarter,
+
+      day_of_month_no,
+      is_week_day,
+      day_name_full,
+      day_name_short,
+      month_name_full,
+      month_name_short,
+
+      month_no,
+      week_no,
+      quarter_no,
+      year_no,
+      century_no,
+
+      first_day_of_week,
+      first_day_of_month,
+      first_day_of_quarter,
+      first_day_of_year,
+
+      last_day_of_week,
+      last_day_of_month,
+      last_day_of_quarter,
+      last_day_of_year,
+
+      (
+        select max(d2.date_actual)
+        from temp d2
+        where d2.year_no = d.year_no
+        and d2.month_no = d.month_no
+        and d2.is_uk_holiday = 0
+        and d2.is_week_day = 1
+      )                                   as last_working_day_of_month,
+
+      (
+        select max(d2.date_actual)
+        from temp d2
+        where d2.year_no = d.year_no
+        and d2.quarter_no = d.quarter_no
+        and d2.is_uk_holiday = 0
+        and d2.is_week_day = 1
+      )                                   as last_working_day_of_quarter,
+
+      (
+        select max(d2.date_actual)
+        from temp d2
+        where d2.year_no = d.year_no
+        and d2.is_uk_holiday = 0
+        and d2.is_week_day = 1
+      )                                   as last_working_day_of_year,
+
+      (
+        select max(d2.date_actual)
+        from temp d2
+        where d2.day_no_cumulative between d.day_no_cumulative-10 and d.day_no_cumulative
+        and d2.is_uk_holiday = 0
+        and d2.is_week_day = 1
+      )                                   as most_recent_working_day,
+
+      cast(day_of_week_no as int64)       as day_of_week_no,
+      cast(day_of_quarter_no as int64)    as day_of_quarter_no,
+      cast(day_of_year_no as int64)       as day_of_year_no,
+
+      year_no_cumulative,
+      quarter_no_cumulative,
+      month_no_cumulative,
+      week_no_cumulative,
+      day_no_cumulative,
+
+      -- lunar information
+      lunar_uk_is_full_moon,
+      lunar_uk_is_total_eclipse,
+      lunar_uk_is_partial_eclipse,
+
+      -- bank holidays
+      is_uk_holiday,
+      uk_holiday_name,
+
+      meta_process_time
+    from temp d
+
   {% endif %}
 {% endmacro %}
