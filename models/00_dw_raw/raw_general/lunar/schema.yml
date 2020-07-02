@@ -1,6 +1,6 @@
 version: 2
 
-models:
+seeds:
     - name: lunar_cycles_dbt_seed
       description: Lunar full moons between 1900 and 2050. Used to calc Easter in date_dim.
       columns:
