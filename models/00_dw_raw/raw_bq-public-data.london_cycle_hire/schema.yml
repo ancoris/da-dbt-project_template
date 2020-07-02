@@ -1,5 +1,5 @@
 version: 2
-# remove database and schema if not in EU processing region
+# comment out database and schema if not in EU processing region
 sources:
   - name: london_santander
     database: bigquery-public-data

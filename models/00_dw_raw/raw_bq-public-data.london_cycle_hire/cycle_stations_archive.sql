@@ -2,7 +2,8 @@
     config(
         materialized='archive_incremental',
         schema='raw_archive_bqpublic',
-        partition_by='date(meta_process_time)'
+        partition_by = {'field': 'date(meta_process_time)',
+          'data_type':'date'}
     )
 }}
 select  id,

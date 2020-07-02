@@ -3,7 +3,8 @@
         materialized='incremental',
         unique_key='rental_id',
         schema='pl_journeys',
-        partition_by='date(meta_process_time)',
+        partition_by = {'field': 'date(meta_process_time)',
+          'data_type':'date'},
         cluster_by='rental_id',
         tags=["pl_journeys", "fact"]
     )

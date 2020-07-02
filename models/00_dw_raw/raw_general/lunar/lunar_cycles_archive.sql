@@ -2,7 +2,8 @@
     config(
         materialized='table',
         schema='raw_archive_general',
-        partition_by='date(meta_process_time)'
+        partition_by = {'field': 'date(meta_process_time)',
+          'data_type':'date'}
     )
 }}
 select  full_moon_date,

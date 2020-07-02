@@ -2,7 +2,8 @@
     config(
         materialized='incremental',
         schema='raw_bqpublic',
-        partition_by='date(meta_delivery_time)'
+        partition_by = {'field': 'date(meta_delivery_time)',
+          'data_type':'date'}
     )
 }}
 select  rental_id,

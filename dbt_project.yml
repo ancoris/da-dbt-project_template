@@ -1,6 +1,8 @@
 name: 'dbt_project_template' # change in seeds section too
 version: '1.0.0'
 
+config-version: 2
+
 
 # Which context to use in profiles.yml
 profile: 'dev'
@@ -25,9 +27,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # Model confirguration
 seeds:
   dbt_project_template:
-    enabled: true
-    schema: raw_general
-    column_types:
+    +enabled: true
+    +schema: raw_general
+    +column_types:
       meta_delivery_time: timestamp
     post-hook: "update {{ this }} set meta_delivery_time = {{meta_process_time()}} where meta_delivery_time is null"
 

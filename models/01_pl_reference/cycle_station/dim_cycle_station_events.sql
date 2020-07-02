@@ -21,7 +21,8 @@
       natural_key_col='cycle_station_natural_key',
       modified_time='meta_process_time',
       created_time='install_date',
-      partition_by='date(meta_process_time)'
+      partition_by = {'field': 'date(meta_process_time)',
+        'data_type':'date'}
   )
 }}
 select  cycle_station_natural_key,
