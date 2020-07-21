@@ -1,7 +1,7 @@
 {{
     config(
         materialized='archive_incremental',
-        schema='raw_archive_bqpublic',
+        schema='archive_bqpublic',
         partition_by = {'field': 'date(meta_process_time)',
           'data_type':'date'}
     )

@@ -1,7 +1,7 @@
 {{
     config(
         materialized='view',
-        schema='raw_clean_bqpublic'
+        schema='clean_bqpublic'
     )
 }}
 select  rental_id,

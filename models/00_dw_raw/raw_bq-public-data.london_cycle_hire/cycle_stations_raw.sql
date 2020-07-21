@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        schema='raw_bqpublic',
+        schema='bqpublic',
         partition_by = {'field': 'date(meta_delivery_time)',
           'data_type':'date'}
     )
