@@ -1,17 +1,14 @@
 ------------------------------------------------------------------------------------------------------------------------
 -- Author: BSL
--- This materialisation is used to maintain static tables such as a date dimension.
--- The materialisation will only refresh the target on initial creation and in full-refresh-mode.
--- No action is taken on an incremental run.
+-- This materialization sends the contents directly to the database with no modifications.
+-- Useful when you want to avoid dbt interfering with a quick query.
 ------------------------------------------------------------------------------------------------------------------------
 {% materialization materialization_none, default -%}
 
   {% set full_refresh_mode = flags.FULL_REFRESH %}
 
-
   {% set target_relation = this %}
   {% set existing_relation = load_relation(this) %}
-
 
   {{ run_hooks(pre_hooks, inside_transaction=False) }}
   {{ run_hooks(pre_hooks, inside_transaction=True) }}

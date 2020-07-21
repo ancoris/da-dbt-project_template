@@ -1,6 +1,6 @@
 -- This macro is used to generate the dataset name in which a model will be created
 -- This copy existing overrides dbt's native macro
--- Delete this macro to return to dbt's default behaviour
+-- Delete/rename this macro to return to dbt's default behaviour
 
 {% macro generate_schema_name(custom_schema_name, node) -%}
 
