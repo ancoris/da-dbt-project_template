@@ -4,6 +4,7 @@ any of the specified prefixes"""
 # Python 3.7
 # Authour: TL
 # Execute from project folder. i.e 'python analysis/utilities/remove_datasets.py'
+# For Windows compatibility try http://www.cygwin.com/
 
 import json
 import os

@@ -4,6 +4,7 @@ project specified. These yml files will be stored in analysis/utilties/columns""
 # Python 3.7
 # Authour: TL
 # Execute from project folder. i.e 'python analysis/utilities/gen_columns.py'
+# For Windows compatibility try http://www.cygwin.com/
 
 import json
 import os
