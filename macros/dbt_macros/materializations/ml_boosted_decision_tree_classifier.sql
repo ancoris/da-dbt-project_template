@@ -2,7 +2,7 @@
 -- Author: TL
 -- This materialisation is used to build a boosted decision tree model (classification)
 ------------------------------------------------------------------------------------------------------------------------
-{% materialization ml_boosted_decision_tree, default %}
+{% materialization ml_boosted_decision_tree_classifier, default %}
 
 {% set target_relation = this %}
 

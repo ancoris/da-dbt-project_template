@@ -1,8 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------
 -- Author: TL
--- This materialisation is used to build a boosted decision tree model (regression)
+-- This materialisation is used to build a dnn (classification)
 ------------------------------------------------------------------------------------------------------------------------
-{% materialization ml_boosted_decision_tree_regressor, default %}
+{% materialization ml_dnn_classifier, default %}
 
 {% set target_relation = this %}
 
@@ -13,6 +13,7 @@
   ;
 {% endset %}
 
+
 -- 2. Evaluate model
 {% set build_evaluation %}
   create or replace table {{this.schema}}.{{this.name | replace("_model","")}}_evaluation
@@ -21,7 +22,25 @@
   from  ml.evaluate(model {{this.schema}}.{{this.name}});
 {% endset %}
 
--- 3. Training info
+
+-- 3. Confusion matrix
+{% set build_confusion_matrix %}
+  create or replace table {{this.schema}}.{{this.name | replace("_model","")}}_confusion_matrix
+  as
+  select *
+  from  ml.CONFUSION_MATRIX(model {{this.schema}}.{{this.name}});
+{% endset %}
+
+-- 4. ROC Curve
+{% set build_roc %}
+  create or replace table {{this.schema}}.{{this.name | replace("_model","")}}_roc
+  as
+  select *
+  from  ml.ROC_CURVE(model {{this.schema}}.{{this.name}});
+{% endset %}
+
+-- 5. Training info
+
 {% set build_training_info %}
   create or replace table {{this.schema}}.{{this.name | replace("_model","")}}_training_info
   as
@@ -32,6 +51,8 @@
 {% call statement("main") %}
     {{ build_model }}
     {{ build_evaluation }}
+    {{ build_confusion_matrix }}
+    {{ build_roc }}
     {{ build_training_info }}
 {% endcall %}
 

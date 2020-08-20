@@ -1,8 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------
 -- Author: TL
--- This materialisation is used to build a boosted decision tree model (regression)
+-- This materialisation is used to build a dnn (regression)
 ------------------------------------------------------------------------------------------------------------------------
-{% materialization ml_boosted_decision_tree_regressor, default %}
+{% materialization ml_dnn_regressor, default %}
 
 {% set target_relation = this %}
 
