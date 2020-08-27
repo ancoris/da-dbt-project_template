@@ -2,7 +2,7 @@
 project specified. These yml files will be stored in analysis/utilties/columns"""
 
 # Python 3.7
-# Authour: TL
+# Author: TL
 # Execute from project folder. i.e 'python analysis/utilities/gen_columns.py'
 # For Windows compatibility try http://www.cygwin.com/
 
@@ -39,7 +39,6 @@ shlocation = "dump/shDump/"
 
 # table lists for each dataset stored here
 tableDump = "dump/tableDump/"
-
 
 # schema .jsons stored here
 jsonDump = "dump/jsonDump/"
