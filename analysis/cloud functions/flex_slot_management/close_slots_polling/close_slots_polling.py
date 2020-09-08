@@ -41,15 +41,13 @@ def fetch_ids(datasetId):
     return(assignment_id, reservation_id, commitment_id)
 
 
-matfact_check = """select
-  user_master_key as user,
-  item_id         as item,
-  sum_score       as rating"""
+# Used to check if the mat fact script is running. This must be updated if mat fact model dataset or model is altered.
+matfact_check = "create or replace model dw_ml_mat_fact.ml_matrix_factorization"
 
 
 def check_matfact_jobs():
     running_scripts = []
-    for job in client.list_jobs(max_results=25, state_filter="running", all_users=True):
+    for job in client.list_jobs(max_results=50, state_filter="running", all_users=True):
         if job.job_type == "query":
             # print("{}, {}, {}, {}, {}".format(job.job_id, job.user_email, job.job_type, job.statement_type, job.created))
             if job.statement_type == "SCRIPT" and matfact_check in job.query:
@@ -166,5 +164,3 @@ def execute(event, context):
             e))
 
         print("Expection triggered. Check stack driver error reporting and cloud_function_error table")
-
-# I should probably include what slot_request no. it is dealing with via a print.
