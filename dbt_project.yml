@@ -24,7 +24,7 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "dbt_modules"
 
 
-# Model confirguration
+# Model configuration
 seeds:
   dbt_project_template:
     +enabled: true
