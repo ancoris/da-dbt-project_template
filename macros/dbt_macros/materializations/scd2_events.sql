@@ -217,7 +217,7 @@
 
 
 {% macro scd2_events_merge_sql(target, source, insert_cols) -%}
-  {{ adapter_macro('scd2_events_merge_sql', target, source, insert_cols) }}
+  {{ adapter.dispatch('scd2_events_merge_sql', target, source, insert_cols) }}
 {%- endmacro %}
 
 {% macro default__scd2_events_merge_sql(target, source, insert_cols) -%}

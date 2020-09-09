@@ -161,7 +161,7 @@ from
 
 
 {% macro scd2_history_merge_sql(target, source, insert_cols, natural_key_col) -%}
-  {{ adapter_macro('scd2_history_merge_sql', target, source, insert_cols, natural_key_col) }}
+  {{ adapter.dispatch('scd2_history_merge_sql', target, source, insert_cols, natural_key_col) }}
 {%- endmacro %}
 
 {% macro default__scd2_history_merge_sql(target, source, insert_cols, natural_key_col) -%}
