@@ -155,7 +155,7 @@
       where   a.{{ strategy.natural_key }} = latest.{{ strategy.natural_key }}
     )
     -- if we are in incremental mode then limit the target rows to only the natural keys changing
-    {% if model.config.mode == 'incremental' %}
+    {% if  model['config']['ignore_deletes'] == 'Y' and model.config.mode == 'incremental' %}
     and exists
     (
       select  1
@@ -186,7 +186,7 @@
           target_latest
   on      target_latest.{{ strategy.natural_key }} = source_data.{{ strategy.natural_key }}
   where   target_latest.meta_scd_action <> 'delete'
-  and     {{ row_change_detection_expr('source_data', 'target_latest', strategy.cols_to_check) }}
+  and     ({{ row_change_detection_expr('source_data', 'target_latest', strategy.cols_to_check) }})
 
   -- existing records now deleted
   union all
