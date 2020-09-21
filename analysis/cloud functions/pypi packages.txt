@@ -1,0 +1,5 @@
+https://pypi.org/project/google-api-core/
+https://pypi.org/project/google-cloud-bigquery-reservation
+https://pypi.org/project/google-cloud-bigquery/
+https://pypi.org/project/google-cloud-error-reporting/
+https://pypi.org/project/pydbtcloud/

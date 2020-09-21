@@ -4,12 +4,19 @@
 
 from pydbtcloud import DbtCloud
 from google.cloud import error_reporting
+from google.cloud import bigquery
+from datetime import datetime, timezone
 
-# Edit values appropriately
-account_id = "account_id"
-api_token = "api_token"
+# Update values appropriately
+project_id = 'FILL'
+account_id = "FILL"
+api_token = "FILL"
 job_id = 0000
 #
+
+client = bigquery.Client(project=project_id)
+
+error_client = error_reporting.Client(project=project_id)
 
 
 def execute(event, context):
@@ -29,4 +36,6 @@ def execute(event, context):
 
     except Exception as e:
         error_client.report_exception()
+        client.query("""insert into `dw_utils.cloud_function_error` (cloud_function, error_time, error) values ('dbtCloud_post_mat_fact', "{}", "{}")""".format(
+            datetime.now(timezone.utc), e))
         print("Expection triggered. Check stack driver error reporting and cloud_function_error table")

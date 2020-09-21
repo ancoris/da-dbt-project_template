@@ -1,0 +1,5 @@
+# Function dependencies, for example:
+# package>=version
+pydbtcloud==0.0.3
+google-cloud-error-reporting==1.0.0
+google-cloud-bigquery==1.27.2
