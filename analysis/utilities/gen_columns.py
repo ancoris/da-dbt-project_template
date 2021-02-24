@@ -62,8 +62,8 @@ if not os.path.exists(os.path.dirname(scriptFolder+columnDump)):
 for targetSource in targets:
     #####
     with open("{}{}{}_{}.sh".format(scriptFolder, shlocation, tableSh, targetSource), "w") as file:
-        file.write("bq ls {}:{} | awk '{{print $1}}' | tail +3  > {}{}tableList_{}.txt".format(projectId,
-                                                                                               targetSource, scriptFolder, tableDump, targetSource))
+        file.write("bq ls --max_results=10000 {}:{} | awk '{{print $1}}' | tail +3  > {}{}tableList_{}.txt".format(projectId,
+                                                                                                                   targetSource, scriptFolder, tableDump, targetSource))
 
     os.system("sh {}{}{}_{}.sh".format(
         scriptFolder, shlocation, tableSh, targetSource))
