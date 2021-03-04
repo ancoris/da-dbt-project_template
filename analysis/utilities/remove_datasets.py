@@ -15,8 +15,8 @@ debug = True
 
 startTime = time.time()
 
-project_ids = ["cfolab-lush"]
-prefixes = ["dbt_tl"]
+project_ids = ["project_id1"]
+prefixes = ["dbt_prefix"]
 
 
 #
