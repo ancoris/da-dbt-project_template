@@ -10,8 +10,8 @@ import json
 import base64
 
 
-admin_project_id = 'psg-magic-dev'
-project_id = 'psg-magic-dev'
+admin_project_id = 'project_id'
+project_id = 'project_id'
 region = 'US'
 
 res_api = ReservationServiceClient()
