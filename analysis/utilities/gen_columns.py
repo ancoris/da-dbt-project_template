@@ -17,11 +17,11 @@ output = True
 startTime = time.time()
 
 # Specify project id
-projectId = "data-sandbox-266217"
+projectId = "project_id"
 
 
 # list target bq source datasets
-targets = ["london_santander", "json_experimentation"]
+targets = ["datset1", "dataset2"]
 
 #
 placedParentDir, filename = os.path.split(__file__)
@@ -44,7 +44,13 @@ tableDump = "dump/tableDump/"
 jsonDump = "dump/jsonDump/"
 
 # schema.yml compatible table columns stored here
-columnDump = "columns/"
+columnDump = "schema_files/"
+
+# pre-clean up
+try:
+    shutil.rmtree(scriptFolder+columnDump)
+except OSError as e:
+    print("Error: {} : {}".format(scriptFolder+"columns", e.strerror))
 
 # Creates directories given the above
 if not os.path.exists(os.path.dirname(scriptFolder+shlocation)):
@@ -96,7 +102,7 @@ for targetSource in targets:
 #
 #  Writes output
 datasetInfo = {}
-for file in os.listdir(scriptFolder+jsonDump):
+for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
     if file.split(".")[0] not in datasetInfo.keys():
         datasetInfo[file.split(".")[0]] = {"tableCount": 0, "columnCount": 0}
     datasetInfo[file.split(".")[0]]["tableCount"] += 1
@@ -109,20 +115,21 @@ for file in os.listdir(scriptFolder+jsonDump):
 
     with open(scriptFolder+jsonDump+"/"+file, "r") as f:
         data = json.load(f)
-        with open("{}{}{}{}".format(scriptFolder, columnDump, dsColFolder, os.path.splitext(file)[0]+".yml"), 'w') as columnTxt:
+        with open("{}{}{}{}".format(scriptFolder, columnDump, dsColFolder, "schema.yml"), 'a+') as columnTxt:
             if output:
                 print("Generating yml for {}:{}".format(
                     file.split(".")[0], file.split(".")[1]))
-            columnTxt.write("version: 2\n")
-            columnTxt.write("sources:\n")
-            columnTxt.write("  - name: {}\n".format(file.split(".")[0]))
-            columnTxt.write("    tables:\n")
+            if enum == 0:
+                columnTxt.write("version: 2\n")
+                columnTxt.write("sources:\n")
+                columnTxt.write("  - name: {}\n".format(file.split(".")[0]))
+                columnTxt.write("    tables:\n")
             columnTxt.write("      - name: {}\n".format(file.split(".")[1]))
             columnTxt.write("        columns:\n")
             for dict in data:
                 columnTxt.write("          - name: {}\n".format(dict["name"]))
-
                 datasetInfo[file.split(".")[0]]["columnCount"] += 1
+            columnTxt.write("\n")
 
 #
 #
