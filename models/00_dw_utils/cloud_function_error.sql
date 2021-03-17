@@ -1,6 +1,7 @@
 {{
     config(
         materialized='materialization_none',
+        enabled = False
     )
 }}
 
