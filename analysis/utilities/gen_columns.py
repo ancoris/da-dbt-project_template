@@ -17,11 +17,11 @@ output = True
 startTime = time.time()
 
 # Specify project id
-projectId = "looker-307214"
+projectId = "project_id"
 
 
 # list target bq source datasets
-targets = ["cognolink", "conference_call_management"]
+targets = ["dataset1", "dataset2"]
 
 #
 placedParentDir, filename = os.path.split(__file__)
