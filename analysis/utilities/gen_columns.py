@@ -146,7 +146,7 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
             columnTxt.write("select\n")
 
             for dict in data:
-                columnTxt.write("   {}\n".format(dict["name"]))
+                columnTxt.write("   {},\n".format(dict["name"]))
 
             columnTxt.write(
                 "from {{ source('{}', '{}') }}\n".format(file.split(".")[0], file.split(".")[1]))
