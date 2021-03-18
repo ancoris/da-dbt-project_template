@@ -10,6 +10,8 @@ import json
 import os
 import time
 import shutil
+import re
+
 
 # Controls console output
 output = True
@@ -21,7 +23,15 @@ projectId = "project_id"
 
 
 # list target bq source datasets
-targets = ["dataset1", "dataset2"]
+targets = ["dataset1", "dateset2"]
+
+##
+
+
+def camel_to_snake(name):
+    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
 
 #
 placedParentDir, filename = os.path.split(__file__)
@@ -134,17 +144,22 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
             columnTxt.write("\n")
             counter.add(file.split(".")[0])
 
-        with open("{}{}{}{}".format(scriptFolder, columnDump, dsColFolder, file.split(".")[1]+".txt"), 'w') as columnTxt:
+        # raw
+        if not os.path.exists(os.path.dirname("{}{}{}raw/".format(scriptFolder, columnDump, dsColFolder))):
+            os.makedirs(os.path.dirname(
+                "{}{}{}raw/".format(scriptFolder, columnDump, dsColFolder)), exist_ok=True)
+
+        with open("{}{}{}raw/{}".format(scriptFolder, columnDump, dsColFolder, file.split(".")[1]+"_raw"+".txt"), 'w') as columnTxt:
             if output:
                 print("Generating select statement for {}:{}".format(
                     file.split(".")[0], file.split(".")[1]))
 
-            columnTxt.write("""{{
+            columnTxt.write("""{{{{
     config(
         materialized='view',
-        schema='raw_',
+        schema='raw_{}'
     )
-}}\n""")
+}}}}\n""".format(file.split(".")[0]))
             columnTxt.write("\n")
             columnTxt.write("select\n")
 
@@ -152,7 +167,33 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
                 columnTxt.write("   {},\n".format(dict["name"]))
 
             columnTxt.write(
-                "from {{ source('{}', '{}') }}\n".format(file.split(".")[0], file.split(".")[1]))
+                "from {{{{ source('{}', '{}') }}}}\n".format(file.split(".")[0], file.split(".")[1]))
+
+        # clean
+        if not os.path.exists(os.path.dirname("{}{}{}clean/".format(scriptFolder, columnDump, dsColFolder))):
+            os.makedirs(os.path.dirname(
+                "{}{}{}clean/".format(scriptFolder, columnDump, dsColFolder)), exist_ok=True)
+
+        with open("{}{}{}clean/{}".format(scriptFolder, columnDump, dsColFolder, file.split(".")[1]+"_clean"+".txt"), 'w') as columnTxt:
+            if output:
+                print("Generating select statement for {}:{}".format(
+                    file.split(".")[0], file.split(".")[1]))
+
+            columnTxt.write("""{{{{
+    config(
+        materialized='view',
+        schema='clean_{}'
+    )
+}}}}\n""".format(file.split(".")[0]))
+            columnTxt.write("\n")
+            columnTxt.write("select\n")
+
+            for dict in data:
+                columnTxt.write("   {}{}as {},\n".format(
+                    dict["name"], " "*(85-len(dict["name"])), camel_to_snake(dict["name"])))
+
+            columnTxt.write(
+                "from {{{{ ref('{}') }}}}\n".format(file.split(".")[1]+"_raw"))
 
 #
 #
