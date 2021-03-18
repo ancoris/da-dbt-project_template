@@ -17,11 +17,11 @@ output = True
 startTime = time.time()
 
 # Specify project id
-projectId = "project_id"
+projectId = "looker-307214"
 
 
 # list target bq source datasets
-targets = ["datset1", "dataset2"]
+targets = ["cognolink", "conference_call_management"]
 
 #
 placedParentDir, filename = os.path.split(__file__)
@@ -130,6 +130,26 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
                 columnTxt.write("          - name: {}\n".format(dict["name"]))
                 datasetInfo[file.split(".")[0]]["columnCount"] += 1
             columnTxt.write("\n")
+
+        with open("{}{}{}{}".format(scriptFolder, columnDump, dsColFolder, file.split(".")[1]+".txt"), 'w') as columnTxt:
+            if output:
+                print("Generating select statement for {}:{}".format(
+                    file.split(".")[0], file.split(".")[1]))
+
+            columnTxt.write("""{{
+    config(
+        materialized='view',
+        schema='raw_',
+    )
+}}\n""")
+            columnTxt.write("\n")
+            columnTxt.write("select\n")
+
+            for dict in data:
+                columnTxt.write("   {}\n".format(dict["name"]))
+
+            columnTxt.write(
+                "from {{ source('{}', '{}') }}\n".format(file.split(".")[0], file.split(".")[1]))
 
 #
 #
