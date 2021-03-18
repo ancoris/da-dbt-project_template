@@ -102,6 +102,7 @@ for targetSource in targets:
 #
 #  Writes output
 datasetInfo = {}
+counter = set()
 for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
     if file.split(".")[0] not in datasetInfo.keys():
         datasetInfo[file.split(".")[0]] = {"tableCount": 0, "columnCount": 0}
@@ -119,7 +120,8 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
             if output:
                 print("Generating yml for {}:{}".format(
                     file.split(".")[0], file.split(".")[1]))
-            if enum == 0:
+
+            if file.split(".")[0] not in counter:
                 columnTxt.write("version: 2\n")
                 columnTxt.write("sources:\n")
                 columnTxt.write("  - name: {}\n".format(file.split(".")[0]))
@@ -130,6 +132,7 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
                 columnTxt.write("          - name: {}\n".format(dict["name"]))
                 datasetInfo[file.split(".")[0]]["columnCount"] += 1
             columnTxt.write("\n")
+            counter.add(file.split(".")[0])
 
         with open("{}{}{}{}".format(scriptFolder, columnDump, dsColFolder, file.split(".")[1]+".txt"), 'w') as columnTxt:
             if output:
