@@ -57,9 +57,20 @@ def rchop(s, suffix):
 
 
 #
-placedParentDir, filename = os.path.split(__file__)
-scriptFolder = placedParentDir + "/"
+if system == 'darwin':
+    placedParentDir, filename = os.path.split(__file__)
+    scriptFolder = placedParentDir + "/"
 
+elif system == 'windows':
+    # JG
+    placedParentDir = os.getcwd()
+    filename = __file__
+    scriptFolder = placedParentDir + "/"
+    scriptFolder = scriptFolder.replace("\\", "/")
+
+else:
+    placedParentDir, filename = os.path.split(__file__)
+    scriptFolder = placedParentDir + "/"
 
 # stores sh scripts for listing tables in a dataset
 tableSh = "tables"
@@ -85,8 +96,8 @@ try:
     shutil.rmtree(scriptFolder+columnDump)
 except OSError as e:
     #print("Error: {} : {}".format(scriptFolder+"columns", e.strerror))
-    print("Nothing to clean up. {} does not exist: {}".format(
-        scriptFolder+"columns", e))
+    print("Nothing to clean up. {} does not exist".format(
+        scriptFolder+"columns"))
 
 # Creates directories given the above
 if not os.path.exists(os.path.dirname(scriptFolder+shlocation)):
