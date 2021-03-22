@@ -3,7 +3,7 @@ project specified. These yml files will be stored in analysis/utilties/schema_fi
 
 # Python 3.7
 # Author: TL (tweaked by JG for windows)
-# Execute from project folder. i.e 'python analysis/utilities/gen_columns.py'
+# Execute from project folder. i.e 'python analysis/utilities/magnificent_model_maker_v2.py'
 # For windows usage, you will will need a bash utitlity installed, see https://gitforwindows.org/
 
 
