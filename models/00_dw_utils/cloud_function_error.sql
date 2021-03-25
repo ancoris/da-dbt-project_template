@@ -1,7 +1,8 @@
 {{
     config(
         materialized='materialization_none',
-        schema='force_to_dw_utils'
+        schema='force_to_dw_utils',
+        enabled=false
     )
 }}
 
