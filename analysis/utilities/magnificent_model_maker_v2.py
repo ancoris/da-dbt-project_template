@@ -29,10 +29,10 @@ output = True
 startTime = time.time()
 
 # Specify project id
-projectId = "looker-307214"
+projectId = "project_here"
 
 # list target bq source datasets
-targets = ["cognolink"]
+targets = ["database_1", "database_2"]
 
 # IF ON WINDOWS specify path to git for windows sh.exe
 git_sh_path = 'C:\\Users\\jgreen\\AppData\\Local\\Programs\\Git\\bin\\sh.exe'
@@ -240,6 +240,7 @@ for enum, file in enumerate(os.listdir(scriptFolder+jsonDump)):
                 columnTxt.write("version: 2\n")
                 columnTxt.write("sources:\n")
                 columnTxt.write("  - name: {}\n".format(datasetName))
+                columnTxt.write("    database: {}\n".format(projectId))
                 columnTxt.write("    tables:\n")
             columnTxt.write("      - name: {}\n".format(tableName))
             columnTxt.write("        columns:\n")
