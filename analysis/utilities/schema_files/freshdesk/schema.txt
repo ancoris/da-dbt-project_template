@@ -1,0 +1,399 @@
+version: 2
+sources:
+  - name: freshdesk
+    database: transactiondata
+    tables:
+      - name: agent
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: available
+          - name: available_since
+          - name: contact_active
+          - name: contact_created_at
+          - name: contact_email
+          - name: contact_job_title
+          - name: contact_language
+          - name: contact_last_login_at
+          - name: contact_mobile
+          - name: contact_name
+          - name: contact_phone
+          - name: contact_time_zone
+          - name: contact_updated_at
+          - name: created_at
+          - name: occasional
+          - name: signature
+          - name: ticket_scope
+          - name: updated_at
+
+      - name: agent_group
+        columns:
+          - name: agent_id
+          - name: group_id
+          - name: _fivetran_synced
+
+      - name: agent_role
+        columns:
+          - name: agent_id
+          - name: role_id
+          - name: _fivetran_synced
+
+      - name: business_hour
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: description
+          - name: name
+          - name: updated_at
+
+      - name: company
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: description
+          - name: name
+          - name: note
+          - name: updated_at
+
+      - name: company_domain
+        columns:
+          - name: company_id
+          - name: domain
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: contact
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: active
+          - name: address
+          - name: company_id
+          - name: created_at
+          - name: description
+          - name: email
+          - name: job_title
+          - name: language
+          - name: mobile
+          - name: name
+          - name: phone
+          - name: time_zone
+          - name: twitter_id
+          - name: updated_at
+
+      - name: conversation
+        columns:
+          - name: id
+          - name: ticket_id
+          - name: _fivetran_synced
+          - name: body
+          - name: body_text
+          - name: contact_id
+          - name: created_at
+          - name: from_email
+          - name: incoming
+          - name: private
+          - name: source
+          - name: support_email
+          - name: updated_at
+
+      - name: conversation_attachment
+        columns:
+          - name: conversation_id
+          - name: id
+          - name: _fivetran_synced
+          - name: attachment_url
+          - name: content_type
+          - name: created_at
+          - name: name
+          - name: size
+          - name: updated_at
+
+      - name: conversation_bcc_email
+        columns:
+          - name: conversation_id
+          - name: email
+          - name: _fivetran_synced
+
+      - name: conversation_cc_email
+        columns:
+          - name: conversation_id
+          - name: email
+          - name: _fivetran_synced
+
+      - name: conversation_to_email
+        columns:
+          - name: conversation_id
+          - name: email
+          - name: _fivetran_synced
+
+      - name: discussion_category
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: description
+          - name: name
+          - name: updated_at
+
+      - name: discussion_comment
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: answer
+          - name: body
+          - name: body_text
+          - name: contact_id
+          - name: created_at
+          - name: discussion_topic_id
+          - name: published
+          - name: spam
+          - name: trash
+          - name: updated_at
+
+      - name: discussion_forum
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: description
+          - name: discussion_category_id
+          - name: forum_type
+          - name: forum_visibility
+          - name: name
+          - name: position
+          - name: posts_count
+          - name: topics_count
+
+      - name: discussion_topic
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: discussion_forum_id
+          - name: hits
+          - name: locked
+          - name: merged_topic_id
+          - name: posts_count
+          - name: published
+          - name: replied_at
+          - name: replied_by
+          - name: stamp_type
+          - name: sticky
+          - name: title
+          - name: updated_at
+          - name: user_id
+          - name: user_votes
+
+      - name: email_config
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: active
+          - name: created_at
+          - name: group_id
+          - name: name
+          - name: primary_role
+          - name: product_id
+          - name: reply_email
+          - name: to_email
+          - name: updated_at
+
+      - name: fivetran_audit
+        columns:
+          - name: id
+          - name: _fivetran_synced
+          - name: done
+          - name: message
+          - name: progress
+          - name: rows_updated_or_inserted
+          - name: schema
+          - name: start
+          - name: status
+          - name: table
+          - name: update_id
+          - name: update_started
+
+      - name: group
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: auto_ticket_assign
+          - name: business_hour_id
+          - name: created_at
+          - name: description
+          - name: escalate_to
+          - name: name
+          - name: unassigned_for
+          - name: updated_at
+
+      - name: priority_lookup
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: priority
+
+      - name: product
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: description
+          - name: name
+          - name: updated_at
+
+      - name: role
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: default
+          - name: description
+          - name: name
+          - name: updated_at
+
+      - name: satisfaction_rating
+        columns:
+          - name: id
+          - name: _fivetran_synced
+          - name: agent_id
+          - name: contact_id
+          - name: created_at
+          - name: feedback
+          - name: group_id
+          - name: survey_id
+          - name: ticket_id
+          - name: updated_at
+
+      - name: satisfaction_rating_value
+        columns:
+          - name: satisfaction_rating_id
+          - name: survey_question_id
+          - name: _fivetran_synced
+          - name: value
+
+      - name: source_lookup
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: source
+
+      - name: status_lookup
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: label_for_agents
+          - name: label_for_customer
+
+      - name: survey
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: created_at
+          - name: title
+          - name: updated_at
+
+      - name: survey_question
+        columns:
+          - name: id
+          - name: survey_id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: accepted_ratings
+          - name: label
+
+      - name: ticket
+        columns:
+          - name: id
+          - name: _fivetran_synced
+          - name: association_type
+          - name: company_id
+          - name: created_at
+          - name: deleted
+          - name: description
+          - name: description_text
+          - name: due_by
+          - name: email_config_id
+          - name: fr_due_by
+          - name: fr_escalated
+          - name: group_id
+          - name: is_escalated
+          - name: priority
+          - name: product_id
+          - name: requester_id
+          - name: responder_id
+          - name: source
+          - name: spam
+          - name: stats_closed_at
+          - name: stats_first_responded_at
+          - name: stats_resolved_at
+          - name: status
+          - name: subject
+          - name: type
+          - name: updated_at
+
+      - name: ticket_cc_email
+        columns:
+          - name: email
+          - name: ticket_id
+          - name: _fivetran_synced
+
+      - name: ticket_fwd_email
+        columns:
+          - name: email
+          - name: ticket_id
+          - name: _fivetran_synced
+
+      - name: ticket_reply_cc_email
+        columns:
+          - name: email
+          - name: ticket_id
+          - name: _fivetran_synced
+
+      - name: ticket_tag
+        columns:
+          - name: index
+          - name: ticket_id
+          - name: _fivetran_synced
+          - name: tag
+
+      - name: ticket_to_email
+        columns:
+          - name: email
+          - name: ticket_id
+          - name: _fivetran_synced
+
+      - name: time_entrie
+        columns:
+          - name: id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+          - name: agent_id
+          - name: billable
+          - name: company_id
+          - name: created_at
+          - name: executed_at
+          - name: note
+          - name: start_time
+          - name: ticket_id
+          - name: time_spent
+          - name: timer_running
+          - name: updated_at
+

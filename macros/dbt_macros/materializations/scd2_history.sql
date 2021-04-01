@@ -25,7 +25,7 @@
 
   {% if not target_relation_exists %}
 
-      {% set build_sql = build_initial_scd2_history_table(strategy, model['injected_sql']) %}
+      {% set build_sql = build_initial_scd2_history_table(strategy, model['compiled_sql']) %}
       {% call statement('main') -%}
           {{ create_table_as(False, target_relation, build_sql) }}
       {% endcall %}
