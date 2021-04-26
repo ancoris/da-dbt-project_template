@@ -29,10 +29,10 @@ output = True
 startTime = time.time()
 
 # Specify project id
-projectId = "transactiondata"
+projectId = "project_here"
 
 # list target bq source datasets
-targets = ["freshdesk"]
+targets = ["database_1", "database_2"]
 
 # IF ON WINDOWS specify path to git for windows sh.exe
 git_sh_path = 'C:\\Users\\jgreen\\AppData\\Local\\Programs\\Git\\bin\\sh.exe'
