@@ -31,15 +31,8 @@
   from  ml.CONFUSION_MATRIX(model {{this.schema}}.{{this.name}});
 {% endset %}
 
--- 4. ROC Curve
-{% set build_roc %}
-  create or replace table {{this.schema}}.{{this.name | replace("_model","")}}_roc
-  as
-  select *
-  from  ml.ROC_CURVE(model {{this.schema}}.{{this.name}});
-{% endset %}
 
--- 5. Training info
+-- 4. Training info
 
 {% set build_training_info %}
   create or replace table {{this.schema}}.{{this.name | replace("_model","")}}_training_info
@@ -52,7 +45,6 @@
     {{ build_model }}
     {{ build_evaluation }}
     {{ build_confusion_matrix }}
-    {{ build_roc }}
     {{ build_training_info }}
 {% endcall %}
 
