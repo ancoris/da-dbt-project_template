@@ -3,4 +3,7 @@ target/
 dbt_modules/
 logs/
 .vscode/
+
+# Ignore Mac DS_Store files
+.DS_Store
 **/.DS_Store
